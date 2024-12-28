@@ -1,0 +1,40 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Order Confirmation - Toy Shop{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center text-success mb-4">Order Confirmed!</h1>
+
+    <div class="alert alert-success text-center">
+        Thank you for your order! Your order has been received successfully.
+    </div>
+
+    <!-- Order Details -->
+    <div class="card shadow mt-4">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Order Summary</h4>
+        </div>
+        <div class="card-body">
+            <h5><strong>Order ID:</strong> {{ order.id }}</h5>
+            <h5><strong>Order Date:</strong> {{ order.created_at|date:"F j, Y, g:i a" }}</h5>
+            <h5><strong>Total Amount:</strong> ${{ total_price }}</h5>
+
+            <h5 class="mt-4">Ordered Products:</h5>
+            <ul class="list-group">
+                {% for item in order_items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    {{ item.product.name }} (x{{ item.quantity }})
+                    <span>${{ item.price|floatformat:2 }}</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+
+    <!-- Back to Home Button -->
+    <div class="text-center mt-4">
+        <a href="{% url 'product_list' %}" class="btn btn-primary">Back to Home</a>
+    </div>
+</div>
+{% endblock %}

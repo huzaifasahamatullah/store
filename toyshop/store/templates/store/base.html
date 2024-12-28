@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Toy Shop{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet"> <!-- Font Awesome for cart icon -->
+    
+    {% block styles %}  <!-- Custom styles block for child templates --> {% endblock %}
+
+    <style>
+        :root {
+            --primary-color: #0B545D; /* Main Theme Color */
+            --secondary-color: #EFFIE4; /* Background/Accent Color */
+            --text-color: #333; /* Text Color */
+            --button-hover-color: #004C56; /* Darker shade of primary color for button hover */
+        }
+
+        body {
+            background-color: var(--secondary-color);
+            color: var(--text-color);
+            font-family: Arial, sans-serif;
+        }
+
+        .navbar {
+            background-color: var(--primary-color);
+        }
+
+        .navbar-brand, .nav-link {
+            color: #fff !important;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: #fff !important;
+            background-color: transparent !important;
+        }
+
+        .navbar-toggler-icon {
+            background-color: #fff;
+        }
+
+        .navbar-light .navbar-toggler {
+            border-color: #fff;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--button-hover-color);
+            border-color: var(--button-hover-color);
+        }
+
+        .card {
+            border: 1px solid var(--primary-color);
+        }
+
+        .card-header {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        .badge-danger {
+            background-color: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: #fff;
+        }
+
+        footer p {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header (Navigation Bar) -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <a class="navbar-brand" href="#">Toy Shop</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'product_list' %}">Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'track_order' %}">Track Order</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Contact</a>
+                    </li>
+                    <!-- Category Dropdown -->
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle" href="#" id="navbarCategoryDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Categories
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarCategoryDropdown">
+                            {% for category in categories %}
+                            <a class="dropdown-item" href="{% url 'product_list' %}?category={{ category.id }}">{{ category.name }}</a>
+                            {% endfor %}
+                        </div>
+                    </li>
+                    <!-- Cart Item Count -->
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'cart_view' %}">
+                            <i class="fas fa-shopping-cart"></i> Cart
+                            {% if request.session.cart %}
+                                <span class="badge badge-pill badge-danger">
+                                    {{ request.session.cart|length }}
+                                </span>
+                            {% else %}
+                                <span class="badge badge-pill badge-danger">0</span>
+                            {% endif %}
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main content area -->
+    <main>
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-4">
+        <p>&copy; 2024 Toy Shop | All Rights Reserved</p>
+    </footer>
+
+    <!-- Optional JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

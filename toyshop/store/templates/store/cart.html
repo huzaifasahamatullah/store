@@ -1,0 +1,64 @@
+{% extends 'store/base.html' %}
+
+{% block title %}Your Cart - Toy Shop{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Your Cart</h1>
+
+        {% if products_in_cart %}
+            <form method="POST" action="{% url 'update_cart' %}">
+                {% csrf_token %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Product</th>
+                                <th>image</th>
+                                <th>price</th>
+                                <th>Quantity</th>
+                                <th>Total</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in products_in_cart %}
+                            <tr>
+                                <td>{{ item.product.name }}</td>
+                                <td><img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" style="width: 80px; height: 80px; object-fit: cover;"></td>
+                                <td>${{ item.product.price }}</td>
+                                <td>
+                                    <!-- Update Quantity Input -->
+                                    <input type="number" name="quantity_{{ item.product.id }}" value="{{ item.quantity }}" min="1" class="form-control" style="width: 80px;">
+                                </td>
+                                <td>${{ item.item_total }}</td>
+                                <td>
+                                    <!-- Remove Product Button -->
+                                    <button type="submit" name="remove_{{ item.product.id }}" value="remove" class="btn btn-danger btn-sm">Remove</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+
+                    <!-- Update Cart Button (outside the table, before the remove button) -->
+                    <div class="text-right">
+                        <button type="submit" class="btn btn-primary">Update Cart</button>
+                    </div>
+                </div>
+            </form>
+
+        {% else %}
+            <p>Your cart is empty.</p>
+        {% endif %}
+
+        <!-- Checkout Button (if applicable) -->
+        <div class="mt-4">
+            <a href="{% url 'place_order' %}" class="btn btn-primary">Proceed to Checkout</a>
+        </div>
+    </div>
+{% endblock %}
+
+
+
+
